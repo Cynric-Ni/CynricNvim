@@ -41,9 +41,10 @@ config.bufferline = {
     event = "User cynricLoad",
     opts = {
         options = {
-            close_command = ":BufferLineClose %d",
+            close_command = ":BufferLineClose %d", --添加关闭命令 %d自动替换成当前编号
             right_mouse_command = ":BufferLineClose %d",
             separator_style = "thin",
+            --左侧让出nvimTree位置
             offsets = {
                 {
                     filetype = "NvimTree",
@@ -65,7 +66,7 @@ config.bufferline = {
     },
     config = function(_, opts)
         vim.api.nvim_create_user_command("BufferLineClose", function(buffer_line_opts)
-            local bufnr = 1 * buffer_line_opts.args
+            local bufnr = 1 * buffer_line_opts.args  --把参数数字化
             local buf_is_modified = vim.api.nvim_get_option_value("modified", { buf = bufnr })
 
             local bdelete_arg
@@ -107,7 +108,7 @@ config.bufferline = {
 
 config.dashboard = {
     "nvimdev/dashboard-nvim",
-    event = "User IceAfter colorscheme",
+    event = "User cynricAfter colorscheme",
     opts = {
         theme = "doom",
         config = {
@@ -164,7 +165,7 @@ config.dashboard = {
 
 config["indent-blankline"] = {
     "lukas-reineke/indent-blankline.nvim",
-    event = "User IceAfter nvim-treesitter",
+    event = "User cynricAfter nvim-treesitter",
     main = "ibl",
     opts = {
         exclude = {
@@ -188,7 +189,7 @@ config["indent-blankline"] = {
 config.lualine = {
     "nvim-lualine/lualine.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
-    event = "User IceLoad",
+    event = "User cynricLoad",
     main = "lualine",
     opts = {
         options = {
@@ -401,7 +402,7 @@ config["nvim-treesitter"] = {
         -- Therefore, the scheme language should be linked to query
         vim.treesitter.language.register("query", "scheme")
 
-        vim.api.nvim_exec_autocmds("User", { pattern = "IceAfter nvim-treesitter" })
+        vim.api.nvim_exec_autocmds("User", { pattern = "cynricAfter nvim-treesitter" })
         vim.api.nvim_exec_autocmds("FileType", { group = "NvimTreesitterFt" })
     end,
 }

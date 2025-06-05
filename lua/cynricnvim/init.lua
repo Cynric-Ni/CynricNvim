@@ -1,14 +1,26 @@
 cynric = {}
+
 require "core.init"
 require "plugins.init"
+
+
+-- Define keymap
+local keymap = cynric.keymap.general
+require("core.utils").group_map(keymap)
+
+for filetype, config in pairs(cynric.ft) do
+    require("core.utils").ft(filetype, config)
+end
 
 -- Only load plugins and colorscheme when --noplugin arg is not present
 if not require("core.utils").noplugin then
     -- Load plugins
-    require("lazy").setup(vim.tbl_values(cynric.plugins), cynric.lazy)
+    require("lazy").setup(vim.tbl_values(cynric.plugins), cynric.lazy)  --vim.tbl_values获取字典中的元素
     
     --创建用户verylazy事件的回调函数 回调函数的作用是扫描plugin文件夹并且
-    vim.api.nvim_create_autocmd("User", {
+    --在verylazy事件后（所有插件加载完毕）扫描plugin文件夹是否有.vim脚本如果有创建cmd自动
+    --执行
+     vim.api.nvim_create_autocmd("User", {
         once = true,
         pattern = "VeryLazy",
         callback = function()
@@ -24,8 +36,8 @@ if not require("core.utils").noplugin then
                     end
                 end
             end
-
-            --require("core.utils").group_map(cynric.keymap.plugins)
+            --并且附带plugins里的keymap
+            require("core.utils").group_map(cynric.keymap.plugins)
 
             -- Define colorscheme
             if not cynric.colorscheme then
